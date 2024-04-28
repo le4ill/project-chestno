@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var message = "{{ message }}";
+        if (message){
+            $('#notification').text(message).fadeIn().delay(3000).fadeOut();
+        }
+    });
+    document.getElementById('file-upload').onchange = function(e) {
+  document.querySelector('.custom-file-upload').innerText = e.target.files[0].name || 'Нажмите сюда!';
+};
+</script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f0f0f0;
+    }
+    h1 {
+        color: #333;
+    }
+    .profile {
+        margin: 20px auto;
+        padding: 20px;
+        width: 80%;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #user_photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+    input[type="text"], input[type="password"], input[type="file"], input[type="submit"] {
+        padding: 10px;
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 80%;
+        max-width: 300px;
+    }
+    .notification {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    border: 4px solid black;
+}
+    #file-upload {
+    display: none;
+  }
+    input[type="file"] {
+  visibility: hidden;
+}
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+    #change_ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-top: -60px;
+        }
+    td {
+    text-align: center; /* Выравниваем текст по центру ячейки */
+   }
+</style>
+
+<div class="container mt-4">
+    <h1>Ваш профиль</h1>
+    <h3>{{current_user.email}}</h3>
+    <div class="profile">
+        <div class="rating">
+            <h2>Ваш рейтинг: {{current_user.progress}}</h2>
+            <h2>{{t}}</h2>
+        </div>
+        <form action="#" method="post" enctype="multipart/form-data">
+            <table style="border: 1px none rgb(0, 0, 0); margin: auto;">
+                <tbody>
+                <tr>
+                    <td style="border: 1px none rgb(0, 0, 0);">
+                        <br>
+                        <img src="/static/User_profile_img/user{{current_user.id}}.jpg" alt="User Photo"
+                             id="user_photo"><br>
+                        <label for="file-upload" class="custom-file-upload">
+                            <img src="/static/standart_img/change_ico.jpg" id="change_ico"></label><br>
+                        <input type="file" name="photo" accept="image/*" id="file-upload">
+                    </td>
+                    <td style="border: 1px none rgb(0, 0, 0);">
+                        <input type="text" name="username" placeholder="Введите имя"><br>
+                        <input type="password" name="password" placeholder="Введите пароль"><br>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <input type="submit" value="Сохранить изменения">
+        </form>
+
+        <a class="btn btn-dark" href="/logout" style="margin-top: 30px;">Выйти из аккаунта</a>
+        <div id="notification" class="notification"></div>
+    </div>
+</div>
+{% endblock %}

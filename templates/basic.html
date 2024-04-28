@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    #tasks @font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    font-stretch: normal;
+    src: url(https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsiH0B4gaVc.ttf) format('truetype');
+  }
+  #tasks @font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-stretch: normal;
+    src: url(https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf) format('truetype');
+  }
+  #tasks @font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-stretch: normal;
+    src: url(https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsgH1x4gaVc.ttf) format('truetype');
+  }
+  #tasks @font-face {
+    font-family: 'Pacifico';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/pacifico/v22/FwZY7-Qmy14u9lezJ-6H6Mw.ttf) format('truetype');
+  }
+  #tasks * {
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+  }
+  #tasks a {
+    text-decoration: none;
+    color: inherit;
+  }
+  #tasks p {
+    font-size: 1.1em;
+    margin: 1em 0;
+  }
+  #tasks .description {
+    margin: 1em auto 2.25em;
+  }
+  #tasks body {
+    width: 40%;
+    min-width: 300px;
+    max-width: 400px;
+    margin: 1.5em auto;
+    color: #333;
+  }
+  #tasks h1 {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-size: 2.5em;
+  }
+  #tasks ul {
+    list-style: none;
+    padding: 0;
+  }
+  #tasks ul .inner {
+    padding-left: 1em;
+    overflow: hidden;
+    display: none;
+  }
+  #tasks ul .inner .inner {
+    text-align:center;
+  }
+  #tasks ul .inner.show {
+    /*display: block;*/
+  }
+  #tasks ul li {
+    margin: 0.5em 0;
+  }
+  #tasks ul li a.toggle {
+    width: 100%;
+    display: block;
+    background: rgba(0, 0, 0, 0.78);
+    color: #fefefe;
+    padding: 0.75em;
+    border-radius: 0.15em;
+    transition: background 0.3s ease;
+  }
+  #tasks ul li a.toggle:hover {
+    background: rgba(0, 0, 0, 0.9);
+  }
+    #tasks {
+    margin-top:60px;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var message = "{{ message }}";
+        if (message){
+            $('#notification').text(message).fadeIn().delay(3000).fadeOut();
+        }
+    });
+    document.getElementById('file-upload').onchange = function(e) {
+  document.querySelector('.custom-file-upload').innerText = e.target.files[0].name || 'Нажмите сюда!';
+};
+</script>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <h1 style="text-align: center;">Прогулка по сайтам</h1>
+            <p>На данном сайте собраны ссылки на разные интересные сайты, по которым мы предлагаем вам прогуляться,
+                параллельно выполняя задания разной сложности и получая за них звёздочки.</p>
+            <p>Также вы сможете посоревноваться со своими друзьями и другими пользователями за первенство по количеству
+                звезд в нашем рейтинге.</p>
+            <p>Регистрируйтесь и зовите друзей, задания могут быть как очень лёгкими, так и невероятно сложными. </p>
+            <p>Перед выполнением задания <b>обязательно прочтите инструкцию!</b> При выполнении задания вы больше не
+                сможете его пройти!</p>
+            {% if current_user.is_authenticated %}
+            <div id="tasks">
+                <ul class="accordion">
+                    <li>
+                        <a class="toggle" href="javascript:void(0);">Задания 1 уровня</a>
+                        <ul class="inner">
+                            <li>
+                                <a href="#" class="toggle">1 задание</a>
+                                <div class="inner">
+                                    {% if not 'level_1:task_1' in current_user.lst_complete_task %}
+                                    <p>
+                                        Получите результат 200 или больше на сайте с прикольным котиком. Нажмите
+                                        "Старт", чтобы начать. Время ограничено!
+                                    </p>
+                                    <p>Инструкция:<b>Вы не должны закрывать открывшиеся окно самостоятельно! Дождитесь
+                                        пока оно закроется само.В противном случае задание не будет засчитано!!!</b></p>
+                                    <a class="btn btn-dark" href="/task/level_1/task_1" style="color:white;">Старт</a>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% if 'level_1:task_1' in current_user.lst_complete_task%}
+                            <li>
+                                <a href="#" class="toggle">2 задание</a>
+                                <div class="inner">
+                                    {% if not 'level_1:task_2' in current_user.lst_complete_task %}
+                                    <p>
+                                        Найдите минимум три невидимые коровы по звуку. Нажмите "Старт", чтобы начать.
+                                        Время ограничено!
+                                    </p>
+                                    <p>Инструкция: <b>Вы не должны закрывать открывшиеся окно самостоятельно! Дождитесь
+                                        пока оно закроется само. В противном случае задание не будет засчитано!!!</b>
+                                    </p>
+                                    <a class="btn btn-dark" href="/task/level_1/task_2" style="color:white;">Старт</a>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% if 'level_1:task_2' in current_user.lst_complete_task%}
+                            <li>
+                                <a href="#" class="toggle">3 задание</a>
+                                <div class="inner">
+                                    {% if not 'level_1:task_3' in current_user.lst_complete_task %}
+                                    <p>
+                                        Звёздочка просто так, только не залипнете)
+                                    </p>
+                                    <a class="btn btn-dark" href="/task/level_1/task_3" style="color:white;">Старт</a>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="toggle" href="javascript:void(0);">Задания 2 уровня</a>
+                        <ul class="inner">
+                            <li>
+                                <a href="#" class="toggle">1 задание</a>
+
+                                <div class="inner">
+                                    <form action="/task/level_2/task_1" method="post">
+                                        {% if not 'level_2:task_1' in current_user.lst_complete_task %}
+                                        <p>
+                                            Давайте представим что вы выйграли миллион рублей в лотерею. Интересно
+                                            сколько у
+                                            вас теперь долларов по последнему курсу?
+                                        </p>
+                                        <p>Введите целую часть суммы в строку и нажмите кнопку "проверить". Актуальный
+                                            курс можно посмотреть <a href="https://www.cbr.ru/"
+                                                                     style="border-bottom: 2px solid #333;"
+                                                                     target="_blank">здесь.</a>
+                                        </p>
+                                        <input type="text" name="level_2_task_1"><br>
+                                        <input class='btn btn-dark' type="submit" style="color:white; margin-top:15px;"
+                                               value="Проверить">
+                                    </form>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+
+                                </div>
+
+                            </li>
+                            {% if 'level_2:task_1' in current_user.lst_complete_task%}
+                            <li>
+                                <a href="#" class="toggle">2 задание</a>
+                                <div class="inner">
+                                    <p>
+                                        Задание еще находится в разработке, оно появится в скором обновлении!
+                                    </p>
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% if 'level_2:task_2' in current_user.lst_complete_task%}
+                            <li>
+                                <a href="#" class="toggle">3 задание</a>
+                                <div class="inner">
+                                    <p>
+                                        Задание еще находится в разработке, оно появится в скором обновлении!
+                                    </p>
+                                </div>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="toggle" href="javascript:void(0);">Задания 3 уровня</a>
+                        <ul class="inner">
+                            <li>
+                                <a href="#" class="toggle">1 задание</a>
+                                <div class="inner">
+                                    {% if not 'level_3:task_1' in current_user.lst_complete_task %}
+                                    <p>
+                                        Получите 1 уровень в тетрисе, играя в режиме Solo. Нажмите "Старт", чтобы
+                                        начать. Время ограничено!
+                                    </p>
+                                    <p>(Регистрироваться и входить не надо, засчитывается только последняя попытка)</p>
+                                    <p>Инструкция: Вы не должны закрывать открывшееся окно самостоятельно! Дождитесь
+                                        пока оно закроется само. В противном случае задание не будет засчитано!!!</p>
+                                    <a class="btn btn-dark" href="/task/level_3/task_1" style="color:white;">Старт</a>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% if 'level_3:task_1' in current_user.lst_complete_task%}
+                            <li>
+                                <a href="#" class="toggle">2 задание</a>
+                                <div class="inner">
+                                    {% if not 'level_3:task_2' in current_user.lst_complete_task %}
+                                    <p>
+                                        Получите 2 уровень в тетрисе, играя в режиме Solo. Нажмите "Старт", чтобы
+                                        начать. Время ограничено!
+                                    </p>
+                                    <p>(Регистрироваться и входить не надо, засчитывается только последняя попытка)</p>
+                                    <p>Инструкция: Вы не должны закрывать открывшееся окно самостоятельно! Дождитесь
+                                        пока оно закроется само. В противном случае задание не будет засчитано!!!</p>
+                                    <a class="btn btn-dark" href="/task/level_3/task_2" style="color:white;">Старт</a>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% if 'level_3:task_2' in current_user.lst_complete_task%}
+                            <li>
+                                <a href="#" class="toggle">3 задание</a>
+                                <div class="inner">
+                                    {% if not 'level_3:task_3' in current_user.lst_complete_task %}
+                                    <p>
+                                        Получите 3 уровень в тетрисе, играя в режиме Solo. Нажмите "Старт", чтобы
+                                        начать. Время ограничено!
+                                    </p>
+                                    <p>(Регистрироваться и входить не надо, засчитывается только последняя попытка)</p>
+                                    <p>Инструкция: Вы не должны закрывать открывшееся окно самостоятельно! Дождитесь
+                                        пока оно закроется само. В противном случае задание не будет засчитано!!!</p>
+                                    <a class="btn btn-dark" href="/task/level_3/task_3" style="color:white;">Старт</a>
+                                    {%else%}
+                                    <p>Вы уже проходили это задание!</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="toggle" href="javascript:void(0);">Задания 4 уровня</a>
+                        <ul class="inner">
+                            <li>
+                                <a href="#" class="toggle">1 задание</a>
+                                <div class="inner">
+                                    <p>
+                                        Задание еще находится в разработке, оно появится в скором обновлении!
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="toggle">2 задание</a>
+                                <div class="inner">
+                                    <p>
+                                        Задание еще находится в разработке, оно появится в скором обновлении!
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#" class="toggle">3 задание</a>
+                                <div class="inner">
+                                    <p>
+                                        Задание еще находится в разработке, оно появится в скором обновлении!
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- partial -->
+                <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'>
+                </script>
+                <script>
+                    $(".toggle").click(function (e) {
+                    e.preventDefault();
+
+                    var $this = $(this);
+
+                    if ($this.next().hasClass("show")) {
+                      $this.next().removeClass("show");
+                      $this.next().slideUp(350);
+                    } else {
+                      $this.parent().parent().find("li .inner").removeClass("show");
+                      $this.parent().parent().find("li .inner").slideUp(350);
+                      $this.next().toggleClass("show");
+                      $this.next().slideToggle(350);
+                    }
+                  });
+                </script>
+            </div>
+            {% else %}
+            <h1 style="text-align: center; margin-top:60px;">Для получения доступа к заданиям зарегистрируйтесь или
+                войдите в
+                аккаунт</h1>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
